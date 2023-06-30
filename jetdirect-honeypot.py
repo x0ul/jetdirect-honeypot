@@ -10,7 +10,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument(
     "-o", "--out-dir", help="specify output directory", default=os.getcwd()
 )
-parser.add_argument("-p", "--port", help="listen port", default=9100)
+parser.add_argument("-p", "--port", help="listen port", type=int, default=9100)
 args = parser.parse_args()
 
 
