@@ -10,13 +10,14 @@ parser = argparse.ArgumentParser()
 parser.add_argument(
     "-o", "--out-dir", help="specify output directory", default=os.getcwd()
 )
+parser.add_argument("-p", "--port", help="listen port", default=9100)
 args = parser.parse_args()
 
 
 logging.basicConfig(level=logging.INFO)
 logging.info("starting server")
 
-s = socket.create_server(("", 9100))
+s = socket.create_server(("", args.port))
 s.listen()
 
 while True:
