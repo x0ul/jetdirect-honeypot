@@ -36,3 +36,32 @@ WantedBy=default.target
 ```
 
 Remember to run `start` and `enable`
+
+# Testing IPP
+Use `ipptool`, part of *cups*, to test IPP printing. Save the
+following print job definition into a file. The `mimeMediaType` field
+and the printer-uri may need to be modified to fit the printer. Play
+around.
+
+```
+{
+    VERSION 2.0
+    OPERATION Print-Job
+    REQUEST-ID 42
+
+    GROUP operation-attributes-tag
+    ATTR charset "attributes-charset" "utf-8"
+    ATTR naturalLanguage "attributes-natural-language" "en"
+    ATTR uri "printer-uri" "ipp://printer.example.com/ipp/print"
+    ATTR name "requesting-user-name" "John Doe"
+    ATTR mimeMediaType "document-format" "application/postscript"
+
+    FILE "testfile"
+}
+```
+To send a job, run `ipptool http://<your-printer-here>:631/ipp/print <path-to-job-definition>`. You may also need/want to modify the `/ipp/print` part of the URI.
+
+# Testing JetDirect
+Simply use `nc` to send a file, eg. `nc -N <host> 9100 < some_file`.
+The `-N` flag causes `nc` to `shutdown` the socket before closing,
+otherwise it may hang.
