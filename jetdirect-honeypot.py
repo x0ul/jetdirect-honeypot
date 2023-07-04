@@ -23,7 +23,7 @@ s.listen()
 while True:
     (clientsocket, address) = s.accept()
     logging.info(f"new connection from {address[0]}")
-    outfile = f"{args.out_dir}/{datetime.datetime.now().isoformat()}_{address[0]}.ps"
+    outfile = f"{args.out_dir}/{datetime.datetime.now().isoformat()}_{address[0]}"
     total_bytes = 0
     with open(outfile, "wb") as f:
         buf = "foobar"
