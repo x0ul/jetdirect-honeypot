@@ -6494,13 +6494,13 @@ process_ipp(ippeve_client_t *client)	/* I - Client */
                             resource, sizeof(resource)) < HTTP_URI_STATUS_OK)
 	  respond_ipp(client, IPP_STATUS_ERROR_ATTRIBUTES_OR_VALUES,
 	              "Bad %s value '%s'.", name, ippGetString(uri, 0, NULL));
-        else if ((!strcmp(name, "job-uri") &&
-                  strncmp(resource, "/ipp/print/", 11)) ||
-                 (!strcmp(name, "printer-uri") &&
-                  strcmp(resource, "/ipp/print") &&
-                  (strcmp(resource, "/") || ippGetOperation(client->request) != IPP_OP_GET_PRINTER_ATTRIBUTES)))
-	  respond_ipp(client, IPP_STATUS_ERROR_NOT_FOUND, "%s %s not found.",
-		      name, ippGetString(uri, 0, NULL));
+//        else if ((!strcmp(name, "job-uri") &&
+//                  strncmp(resource, "/ipp/print/", 11)) ||
+//                 (!strcmp(name, "printer-uri") &&
+//                  strcmp(resource, "/ipp/print") &&
+//                  (strcmp(resource, "/") || ippGetOperation(client->request) != IPP_OP_GET_PRINTER_ATTRIBUTES)))
+//	  respond_ipp(client, IPP_STATUS_ERROR_NOT_FOUND, "%s %s not found.",
+//		      name, ippGetString(uri, 0, NULL));
 	else if (client->operation_id != IPP_OP_GET_PRINTER_ATTRIBUTES && (status = authenticate_request(client)) != HTTP_STATUS_CONTINUE)
         {
           flush_document_data(client);
