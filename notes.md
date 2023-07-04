@@ -15,6 +15,8 @@ After=network.target
 
 [Service]
 ExecStart=/home/faxspam/jetdirect-honeypot/jetdirect-honeypot.py -o /home/faxspam/jetdirect
+Restart=on-failure
+RestartSec=5s
 
 [Install]
 WantedBy=default.target
