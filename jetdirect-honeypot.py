@@ -29,6 +29,10 @@ while True:
         buf = "foobar"
         while buf:
             buf = clientsocket.recv(1024)
+            if b"@PJL INFO STATUS" in buf:
+                clientsocket.send(b'CODE=10001\r\nDISPLAY="00 READY"\r\nONLINE=TRUE\r\n\f')
+            elif b"@PJL INFO ID" in buf:
+                clientsocket.send(b'HP COLOR LASERJET 9500\r\n\f')
             total_bytes += len(buf)
             logging.debug(f"received {len(buf)} bytes")
             f.write(buf)
