@@ -4,6 +4,7 @@ import argparse
 import datetime
 import logging
 import os
+import select
 import socket
 
 parser = argparse.ArgumentParser()
@@ -18,18 +19,25 @@ logging.basicConfig(level=logging.INFO)
 logging.info("starting server")
 
 s = socket.create_server(("", args.port))
-s.settimeout(15)
+s.setblocking(False)
 s.listen()
 
 while True:
+    r, _, _ = select.select([s], [], [])
+    if not r:
+        continue
+
     (clientsocket, address) = s.accept()
     logging.info(f"new connection from {address[0]}")
     outfile = f"{args.out_dir}/{datetime.datetime.now().isoformat()}_{address[0]}"
     total_bytes = 0
     with open(outfile, "wb") as f:
-        buf = "foobar"
-        while buf:
+        while True:
             try:
+                r, _, _ = select.select([clientsocket], [], [], 15)
+                if not r:
+                    logging.info("timed out waiting for recv")
+                    break
                 buf = clientsocket.recv(1024)
                 if b"@PJL INFO STATUS" in buf:
                     clientsocket.send(
@@ -40,8 +48,11 @@ while True:
                 total_bytes += len(buf)
                 logging.debug(f"received {len(buf)} bytes")
             except ConnectionResetError:
-                print("connection reset")
+                logging.info("connection reset")
                 break
+            except TimeoutError:
+                break
+
             f.write(buf)
 
         logging.info(f"wrote out {outfile} ({total_bytes} bytes)")
