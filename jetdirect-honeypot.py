@@ -18,6 +18,7 @@ logging.basicConfig(level=logging.INFO)
 logging.info("starting server")
 
 s = socket.create_server(("", args.port))
+s.settimeout(15)
 s.listen()
 
 while True:
